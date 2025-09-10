@@ -1,3 +1,5 @@
+import 'package:app89/home.dart';
+import 'package:app89/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:app89/constantes.dart' as cons;
 
@@ -53,7 +55,18 @@ class _LoginState extends State<Login> {
             SizedBox(height: size.height * 0.075,),
             ElevatedButton(
               onPressed: (){
-
+                setState(() {
+                  /*El usuario y contraseña son correctos*/
+                  if(usuario.text  == cons.user &&
+                      password.text == cons.pass) {
+                    //Cambiar de vista
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Home()));
+                  } else {
+                    //mostramos un mensaje de error (Snackbar)
+                    ShowSnackbar(context, 'Usuario invalido', 20);
+                  }
+                });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: cons.azulito,
