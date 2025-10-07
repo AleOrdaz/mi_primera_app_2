@@ -14,21 +14,21 @@ class DatabaseHelper {
   static const columnName = 'name';
   static const columnAge = 'age';
 
-  late Database _db; //SE CREA LA INSTANCIA DE LA BD A TRAVÉS DE SQLITE
-
+  static late Database _db; //SE CREA LA INSTANCIA DE LA BD A TRAVÉS DE SQLITE
 
   // this opens the database (and creates it if it doesn't exist)
-  Future<void> init() async {
+  static Future<void> init() async {
     final path;
 
     ///Obtención de la dirección/path para almacenar la BD
-    if (kIsWeb) { //Indicamos si se va abrir en web
+    if (kIsWeb) {
+      //Indicamos si se va abrir en web
       //Dirección en donde se guardara la BD
       path = "/assets/db"; //Local dentro de nuestra app (visible)
     } else {
       //Se almacena de forma oculta dentro de la app
-      final documentsDirectory = (await getApplicationDocumentsDirectory())
-          .path;
+      final documentsDirectory =
+          (await getApplicationDocumentsDirectory()).path;
       path = join(documentsDirectory, _databaseName);
     }
 
@@ -42,7 +42,7 @@ class DatabaseHelper {
   }
 
   // SQL code to create the database table
-  Future _onCreate(Database db, int version) async {
+  static Future _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $table (
         $columnId INTEGER PRIMARY KEY autoincrement,
@@ -55,7 +55,7 @@ class DatabaseHelper {
   // Inserts a row in the database where each key in the Map is a column name
   // and the value is the column value. The return value is the id of the
   // inserted row.
-  Future<int> insert(Map<String, dynamic> row) async {
+  static Future<int> insert(Map<String, dynamic> row) async {
     return await _db.insert(table, row);
   }
 }
