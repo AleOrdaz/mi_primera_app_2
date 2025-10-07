@@ -1,3 +1,4 @@
+import 'package:app89/dependencias.dart';
 import 'package:app89/listas.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Listas()
+      home: Dependencias()
     );
   }
 }
