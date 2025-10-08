@@ -1,10 +1,16 @@
 import 'package:app89/dependencias.dart';
 import 'package:app89/listas.dart';
+import 'package:app89/utils/database.dart';
 import 'package:flutter/material.dart';
-
+import 'package:sqflite/sqflite.dart';
 import 'login.dart';
 
-void main() {
+Future<void> main() async {
+  //Protección al construir la app
+  WidgetsFlutterBinding.ensureInitialized(); //Inicializa los widgets
+
+  await DatabaseHelper.init(); // initialize the database
+
   runApp(const MyApp());
 }
 

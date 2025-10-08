@@ -14,11 +14,11 @@ class DatabaseHelper {
   static const columnName = 'name';
   static const columnAge = 'age';
 
-  late Database _db; //SE CREA LA INSTANCIA DE LA BD A TRAVÉS DE SQLITE
+  static late Database _db; //SE CREA LA INSTANCIA DE LA BD A TRAVÉS DE SQLITE
 
 
   // this opens the database (and creates it if it doesn't exist)
-  Future<void> init() async {
+  static Future<void> init() async {
     final path;
 
     ///Obtención de la dirección/path para almacenar la BD
@@ -42,7 +42,7 @@ class DatabaseHelper {
   }
 
   // SQL code to create the database table
-  Future _onCreate(Database db, int version) async {
+  static Future _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $table (
         $columnId INTEGER PRIMARY KEY autoincrement,
@@ -55,7 +55,43 @@ class DatabaseHelper {
   // Inserts a row in the database where each key in the Map is a column name
   // and the value is the column value. The return value is the id of the
   // inserted row.
-  Future<int> insert(Map<String, dynamic> row) async {
+  static Future<int> insert(Map<String, dynamic> row) async {
     return await _db.insert(table, row);
+  }
+
+  // All of the rows are returned as a list of maps, where each map is
+  // a key-value list of columns.
+  Future<List<Map<String, dynamic>>> queryAllRows() async {
+    return await _db.query(table); ///SELECT * FROM TABLA
+  }
+
+
+  // All of the methods (insert, query, update, delete) can also be done using
+  // raw SQL commands. This method uses a raw query to give the row count.
+  Future<int> queryRowCount() async {
+    final results = await _db.rawQuery('SELECT COUNT(*) FROM $table');
+    return Sqflite.firstIntValue(results) ?? 0;
+  }
+
+  // We are assuming here that the id column in the map is set. The other
+  // column values will be used to update the row.
+  Future<int> update(Map<String, dynamic> row) async {
+    int id = row[columnId]; //UPDATE TABLA SET VALOR = ALGO WHERE ID = 1;
+    return await _db.update(
+      table,
+      row,
+      where: '$columnId = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Deletes the row specified by the id. The number of affected rows is
+  // returned. This should be 1 as long as the row exists.
+  Future<int> delete(int id) async {
+    return await _db.delete( //DELETE TABLA WHERE ID = 0;
+      table,
+      where: '$columnId = ?',
+      whereArgs: [id],
+    );
   }
 }
