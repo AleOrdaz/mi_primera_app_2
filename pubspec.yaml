@@ -38,6 +38,9 @@ dependencies:
   path_provider: ^2.1.1
   sqflite:                        #se adapta a la version dart
   path: ^1.8.3
+  google_maps_flutter: ^2.5.0
+  geocoding:
+  shared_preferences: ^2.0.13     #Preferencias del usuario
 
 dev_dependencies:
   flutter_test:
@@ -62,8 +65,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - img/      #QUE PUEDE ACCEDER A TODO EL CONTENIDO DE LA CARPETA
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

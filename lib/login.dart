@@ -1,7 +1,9 @@
 import 'package:app89/home.dart';
+import 'package:app89/mapa.dart';
 import 'package:app89/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:app89/constantes.dart' as cons;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -11,9 +13,40 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  late SharedPreferences sharedPreferences;
+  //late -> que despues se le asigna su valor
   bool mostrarOcultar = false;
   final usuario = TextEditingController();
   final password = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ///INITSTATE NO PUEDE SER UNA FUNCIÓN ASYNC
+    initShared();
+  }
+
+  initShared() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+
+    //REVISAR SI TIENE LA SESIÓN ABIERTA
+    bool band = sharedPreferences.getBool('band') ?? false;
+    if(band) {
+      //LA SESIÓN ABIERTA O INICIADA
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => Mapa()));
+    } else {
+      // NO SE HACE NADA, SE QUEDA EN LOGIN
+    }
+
+
+    /**BOTON DE CERRAR SESIÓN/
+     *
+     */
+    sharedPreferences.setBool('band', false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +61,11 @@ class _LoginState extends State<Login> {
           ///centrar a los hijos en el centro toda la vista
           mainAxisAlignment:  MainAxisAlignment.center,
           children: [
+            Image.asset(
+              'img/imagen1.png', //nombre y su ubicación
+              width: 100, height: 100, //tamaño de la img
+              fit: BoxFit.cover, //si ocupa o no todo el espacio
+            ),
             SizedBox(height: size.height * 0.05,),
             Text(
               'INICIO DE SESIÓN',
@@ -59,6 +97,12 @@ class _LoginState extends State<Login> {
                   /*El usuario y contraseña son correctos*/
                   if(usuario.text  == cons.user &&
                       password.text == cons.pass) {
+                    //ALMACENAMOS EN SHARED
+                    //CADA VEZ QUE INICIE SESIÓN CORRECTAMENTE
+                    sharedPreferences.setString('user', usuario.text);
+                    sharedPreferences.setString('pass', password.text);
+                    sharedPreferences.setBool('band', true);
+
                     //Cambiar de vista
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => Home()));
