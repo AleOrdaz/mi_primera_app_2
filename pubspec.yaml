@@ -41,6 +41,8 @@ dependencies:
   google_maps_flutter: ^2.5.0
   geocoding:
   shared_preferences: ^2.0.13     #Preferencias del usuario
+  firebase_core:
+  cloud_firestore: ^4.9.3
 
 dev_dependencies:
   flutter_test:

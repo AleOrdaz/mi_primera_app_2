@@ -1,15 +1,49 @@
 import 'package:app89/dependencias.dart';
 import 'package:app89/listas.dart';
 import 'package:app89/utils/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'firebase_options.dart';
 import 'login.dart';
 
 Future<void> main() async {
   //Protección al construir la app
   WidgetsFlutterBinding.ensureInitialized(); //Inicializa los widgets
 
-  await DatabaseHelper.init(); // initialize the database
+  //await DatabaseHelper.init(); // initialize the database
+
+
+  await Firebase.initializeApp( //inicia firevase con los opcines agregadas
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  //instancia de BD de FIREBASE
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+  //Referencia de la tabla (ya sea que se cree antes o desde aquí s epuede crear)
+  final CollectionReference users = db.collection('users');
+
+  //Se crea los valores (ya sea en modelo, valor por valor) que se van a guardar
+  final Map<String, dynamic> userFields = {
+    'name': 'alejandro2',
+    'last_name': 'ordaz',
+    'age': '28'
+  };
+
+  //Generar un nuevo documento (registtro) con ID automatico
+  DocumentReference newUser = users.doc();
+
+  print(users.id); //obtener el ID automatico
+
+  await newUser.set(userFields); //Se almacena el nuevo registro
+
+  /*Se obtiene el ID para poder actualizar y/o eliminar*/
+  String newIdUser =  newUser.id;
+
+  await users.doc(newIdUser).update({'age': '29'});
+
+  await users.doc(newIdUser).delete();
 
   runApp(const MyApp());
 }

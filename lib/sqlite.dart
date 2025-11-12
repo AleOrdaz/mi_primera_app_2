@@ -33,13 +33,13 @@ class _SQLiteState extends State<SQLite> {
           ),
           ElevatedButton(
             onPressed: () {
-              _update();
+              //_update();
             },
             child: Text('Editar datos U'),
           ),
           ElevatedButton(
             onPressed: () {
-              _delete();
+              //_delete();
             },
             child: Text('Eliminar datos D'),
           )
@@ -82,9 +82,9 @@ class _SQLiteState extends State<SQLite> {
                     DatabaseHelper.columnName: name.text,
                     DatabaseHelper.columnAge: int.parse(age.text)
                   };
-                  final id = await dbHelper.insert(row);
+                  //final id = await dbHelper.insert(row);
 
-                  debugPrint('inserted row id: $id'); // = print("");
+                  //debugPrint('inserted row id: $id'); // = print("");
 
                   Navigator.of(context).pop(); // Cerrar el AlertDialog
                 },
@@ -93,10 +93,10 @@ class _SQLiteState extends State<SQLite> {
             ],
 
           );
-          )
-        }
+        });
+  }
 
-        void _select() async {
+  void _select() async {
       final allRows = await dbHelper.queryAllRows();
       debugPrint('query all rows:');
       //singleton.users = allRows;
