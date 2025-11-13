@@ -43,6 +43,8 @@ dependencies:
   shared_preferences: ^2.0.13     #Preferencias del usuario
   firebase_core:
   cloud_firestore: ^4.9.3
+  firebase_auth:
+  google_sign_in:
 
 dev_dependencies:
   flutter_test:
